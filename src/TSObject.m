@@ -1,8 +1,11 @@
 
 #import <tinystep/TSObject.h>
+#import <tinystep/TSAutoreleasePool.h>
 #import <objc/runtime.h>
 #import <stdlib.h>
 #import <string.h>
+
+#import "atomicoperations.h"
 
 #ifdef ALIGN
 #undef ALIGN
@@ -54,17 +57,33 @@ void TSDeallocObject(id anObject) {
 
 static inline
 void TSIncrementRefCount(id anObject) {
+#if defined(GSATOMICREAD)
+	GSAtomicIncrement((gsatomic_t)&(((obj)anObject)[-1].retained));
+#else
 	((obj)anObject)[-1].retained++;
+#endif
 }
 
 static inline
 BOOL TSDecrementRefCountWasZero(id anObject) {
+
+#if	defined(GSATOMICREAD)
+	int	result;
+	result = GSAtomicDecrement((gsatomic_t)&(((obj)anObject)[-1].retained));
+	if(result < 0){
+		(((obj)anObject)[-1].retained) = 0;
+	  	return YES;
+	} else {
+		return NO;
+	}
+#else
 	if (((obj)anObject)[-1].retained == 0){
 		return YES;
 	} else {
 		((obj)anObject)[-1].retained--;
 		return NO;
 	}
+#endif
 }
 
 static inline
@@ -81,7 +100,7 @@ static IMP autorelease_imp;
 +(void) initialize
 {
 	if(self == [TSObject class]) {
-		autorelease_class = [NSAutoreleasePool class];
+		autorelease_class = [TSAutoreleasePool class];
 		autorelease_sel = @selector(addObject:);
 		autorelease_imp = [autorelease_class methodForSelector: autorelease_sel];
 
@@ -151,7 +170,7 @@ static IMP autorelease_imp;
 
 -(int)retainCount
 {
-	return TSRefCount(self);
+	return TSRefCount(self) + 1;
 }
 
 - (IMP) methodForSelector: (SEL)aSelector

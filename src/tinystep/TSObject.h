@@ -1,5 +1,5 @@
-
-#import <objc/Object.h>
+#import <objc/runtime.h>
+#import <tinystep/TSConfig.h>
 
 @interface TSObject {
 	Class isa;

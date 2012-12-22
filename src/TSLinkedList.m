@@ -4,7 +4,7 @@
 typedef struct TSLinkedListNode {
 	struct TSLinkedListNode* _prev;
 	struct TSLinkedListNode* _next;
-	id _data;
+	__unsafe_unretained id _data;
 } TSLinkedListNode;
 
 

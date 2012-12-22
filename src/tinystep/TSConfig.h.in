@@ -1,0 +1,39 @@
+
+#include <tinystep/config.h>
+
+@INCLUDE_STDINT@
+@DEFINE_INT8_T@
+@DEFINE_UINT8_T@
+@DEFINE_INT16_T@
+@DEFINE_UINT16_T@
+@DEFINE_INT32_T@
+@DEFINE_UINT32_T@
+@DEFINE_INT64_T@
+@DEFINE_UINT64_T@
+@DEFINE_INTPTR_T@
+
+#ifndef __has_include
+#  define __has_include(x) 0
+#endif
+#ifndef __has_feature
+#  define __has_feature(x) 0
+#endif
+#ifndef __has_builtin
+#  define __has_builtin(x) 0
+#endif
+
+#if !__has_feature(objc_arc)
+#    define __strong 
+#    define __weak 
+#endif
+
+#ifndef __unsafe_unretained
+#  if !__has_feature(objc_arc)
+#    define __unsafe_unretained
+#  endif
+#endif
+#ifndef __bridge
+#  if !__has_feature(objc_arc)
+#    define __bridge
+#  endif
+#endif

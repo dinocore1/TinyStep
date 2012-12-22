@@ -5,6 +5,7 @@ lib_LTLIBRARIES = libtinystep.la
 pkginclude_HEADERS = \
 	tinystep/TinyStep.h \
 	tinystep/TSObject.h \
+	tinystep/TSAutoreleasePool.h \
 	tinystep/TSString.h \
 	tinystep/TSList.h \
 	tinystep/TSLinkedList.h
@@ -12,6 +13,7 @@ pkginclude_HEADERS = \
 libtinystep_la_SOURCES = \
 	tinystep/TinyStep.h \
 	TSObject.m tinystep/TSObject.h \
+	TSAutoreleasePool.m tinystep/TSAutoreleasePool.h \
 	TSString.m tinystep/TSString.h \
 	TSLinkedList.m TSLinkedList.h
 
