@@ -2,10 +2,10 @@
 #import <tinystep/TSObject.h>
 #import <tinystep/TSList.h>
 
-@class TSLinkedListNode;
+struct TSLinkedListNode;
 @interface TSLinkedList : TSObject<TSList>{
-	TSLinkedListNode* _start;
-	TSLinkedListNode* _end;
+	struct TSLinkedListNode* _start;
+	struct TSLinkedListNode* _end;
 	unsigned int _size;
 }
 

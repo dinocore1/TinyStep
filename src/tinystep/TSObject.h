@@ -18,7 +18,10 @@
 
 -(id)retain;
 -(void)release;
+-(id)autorelease;
 -(int)retainCount;
+
+-(IMP)methodForSelector:(SEL)aSelector;
 
 @end
 

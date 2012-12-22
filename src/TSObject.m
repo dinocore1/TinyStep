@@ -72,7 +72,21 @@ unsigned int TSRefCount(id anObject) {
 	return ((obj)anObject)[-1].retained;
 }
 
+static id autorelease_class = nil;
+static SEL autorelease_sel;
+static IMP autorelease_imp;
+
 @implementation TSObject
+
++(void) initialize
+{
+	if(self == [TSObject class]) {
+		autorelease_class = [NSAutoreleasePool class];
+		autorelease_sel = @selector(addObject:);
+		autorelease_imp = [autorelease_class methodForSelector: autorelease_sel];
+
+	}
+}
 
 +(Class)class
 {
@@ -97,13 +111,13 @@ unsigned int TSRefCount(id anObject) {
 
 -(Class)class 
 {
-   return isa;
+	return object_getClass(self);
 }
 
 
 -(Class)superclass 
 {
-   return class_getSuperclass(isa);
+	return class_getSuperclass(object_getClass(self));
 }
 
 -(void)dealloc
@@ -129,9 +143,26 @@ unsigned int TSRefCount(id anObject) {
 	}
 }
 
+-(id)autorelease
+{
+	(*autorelease_imp)(autorelease_class, autorelease_sel, self);
+	return self;
+}
+
 -(int)retainCount
 {
 	return TSRefCount(self);
+}
+
+- (IMP) methodForSelector: (SEL)aSelector
+{
+  /*
+   *    If 'self' is an instance, object_getClass() will get the class,
+   *    and class_getMethodImplementation() will get the instance method.
+   *    If 'self' is a class, object_getClass() will get the meta-class,
+   *    and class_getMethodImplementation() will get the class method.
+   */
+   return class_getMethodImplementation(object_getClass(self), aSelector);
 }
 
 @end
