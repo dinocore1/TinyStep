@@ -4,6 +4,7 @@ lib_LTLIBRARIES = libtinystep.la
 #declare public headers that will be installed
 pkginclude_HEADERS = \
 	tinystep/TinyStep.h \
+	tinystep/TSMemZone.h \
 	tinystep/TSObject.h \
 	tinystep/TSAutoreleasePool.h \
 	tinystep/TSString.h \
@@ -12,6 +13,7 @@ pkginclude_HEADERS = \
 
 libtinystep_la_SOURCES = \
 	tinystep/TinyStep.h \
+	TSMemZone.m tinystep/TSMemZone.h \
 	TSObject.m tinystep/TSObject.h \
 	TSAutoreleasePool.m tinystep/TSAutoreleasePool.h \
 	TSString.m tinystep/TSString.h \

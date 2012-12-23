@@ -1,5 +1,6 @@
 
 #import <tinystep/TSObject.h>
+#import <tinystep/TSMemZone.h>
 #import <tinystep/TSAutoreleasePool.h>
 #import <objc/runtime.h>
 #import <stdlib.h>
@@ -39,7 +40,7 @@ typedef	struct obj_layout *obj;
 static inline
 id TSAllocateObject(Class aClass, size_t extrabytes) {
 	int size = class_getInstanceSize(aClass) + extrabytes + sizeof(obj_layout);
-	id newobj = malloc(size);
+	id newobj = TSDefaultMalloc(size);
 	if(newobj) {
 		memset(newobj, 0, size);
 		newobj = (id)&((obj)newobj)[1];
@@ -52,7 +53,7 @@ static inline
 void TSDeallocObject(id anObject) {
 	object_setClass(anObject, (Class)(void*)0xdeadface);
 	obj o = &((obj)anObject)[-1];
-	free(o);
+	TSDefaultFree(o);
 }
 
 static inline

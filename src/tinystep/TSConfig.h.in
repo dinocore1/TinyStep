@@ -37,3 +37,7 @@
 #    define __bridge
 #  endif
 #endif
+
+
+#define TSEXPORT extern
+#define TSDECLARE 
