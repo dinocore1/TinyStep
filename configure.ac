@@ -45,6 +45,29 @@ AC_SUBST(DEFINE_INT64_T)
 AC_SUBST(DEFINE_UINT64_T)
 AC_SUBST(DEFINE_INTPTR_T)
 
+AC_ARG_ENABLE([thread-support],
+  AS_HELP_STRING([--disable-thread-support], [turns off thread support]),
+  [THREAD_SUPPORT="no"],
+  [THREAD_SUPPORT="yes"]
+)
+
+if test $THREAD_SUPPORT = yes ; then
+  AC_CHECK_HEADER([pthread.h],
+  [
+  THREAD_SUPPORT="#define THREAD_SUPPORT 1"
+  INCLUDE_PTHREAD="#include <pthread.h>"
+  ] 
+  ,
+  AC_MSG_ERROR([pthread is required])
+  )
+else
+  THREAD_SUPPORT=""
+  INCLUDE_PTHREAD=""
+fi
+
+AC_SUBST(THREAD_SUPPORT)
+AC_SUBST(INCLUDE_PTHREAD)
+
 AC_PROG_OBJC([clang])
 
 #output Makefiles

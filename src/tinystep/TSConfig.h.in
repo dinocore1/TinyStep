@@ -12,6 +12,9 @@
 @DEFINE_UINT64_T@
 @DEFINE_INTPTR_T@
 
+@THREAD_SUPPORT@
+@INCLUDE_PTHREAD@
+
 #ifndef __has_include
 #  define __has_include(x) 0
 #endif
