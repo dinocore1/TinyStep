@@ -7,11 +7,14 @@ struct autorelease_array_list;
 	TSAutoreleasePool* _parent;
 	struct autorelease_array_list* _released;
 	struct autorelease_array_list* _released_head;
-	unsigned _released_count;
+	unsigned int _released_count;
+
+	/* The method to add an object to this pool used for faster calling*/
+  	void (*_addImp)(id, SEL, id);
 }
 
-+(void) addObject: (id)anObj;
 +(id) currentPool;
++(void) addObject: (id)anObj;
 
 -(void) addObject: (id)anObj;
 

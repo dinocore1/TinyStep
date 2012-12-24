@@ -6,6 +6,10 @@ AC_CANONICAL_SYSTEM # create cross platform build system
 AM_INIT_AUTOMAKE
 LT_INIT
 
+AC_PROG_OBJC([clang])
+
+PKG_CHECK_MODULES( OBJC, libobjc)
+
 AC_ARG_ENABLE([debug],
   AS_HELP_STRING([--enable-debug], [compile with -g -O0]),
   [echo "compiling with -g -O0"
@@ -68,7 +72,7 @@ fi
 AC_SUBST(THREAD_SUPPORT)
 AC_SUBST(INCLUDE_PTHREAD)
 
-AC_PROG_OBJC([clang])
+
 
 #output Makefiles
 AC_CONFIG_FILES([

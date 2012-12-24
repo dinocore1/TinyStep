@@ -20,5 +20,5 @@ TSDefaultZone();
 }
 #endif
 
-#define TSDefaultMalloc(size) TSMalloc(TSDefaultZone(), size);
-#define TSDefaultFree(ptr) TSFree(TSDefaultZone(), ptr);
+#define TSDefaultMalloc(size) TSMalloc(TSDefaultZone(), size)
+#define TSDefaultFree(ptr) TSFree(TSDefaultZone(), ptr)

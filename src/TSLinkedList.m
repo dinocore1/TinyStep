@@ -40,8 +40,9 @@ typedef struct TSLinkedListNode {
 static inline
 TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 {
+	int i;
 	TSLinkedListNode* retval = list->_start;
-	for(int i=0;i<index;i++) {
+	for(i=0;i<index;i++) {
 		retval = retval->_next;
 	}
 	return retval;

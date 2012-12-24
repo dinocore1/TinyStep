@@ -44,3 +44,6 @@
 
 #define TSEXPORT extern
 #define TSDECLARE 
+
+#define RETAIN(x) [x retain]
+#define RELEASE(x) [x release]

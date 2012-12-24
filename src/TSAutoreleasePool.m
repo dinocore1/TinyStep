@@ -1,7 +1,10 @@
 
 
 #import <tinystep/TSAutoreleasePool.h>
+#import <tinystep/TSMemZone.h>
+#import <tinystep/TSThread.h>
 
+#define BEGINNING_POOL_SIZE 32
 
 typedef struct autorelease_array_list
 {
@@ -11,8 +14,43 @@ typedef struct autorelease_array_list
   __unsafe_unretained id objects[0];
 } array_list_struct;
 
+#define GETCURRENTPOOL \
+	TSThread *t = TSCurrentThread(); \
+	TSAutoreleasePool *pool; \
+	pool = t->_autorelease_thread_vars.current_pool; \
+	if(pool == nil){ \
+		pool = t->_autorelease_thread_vars.current_pool = [[TSAutoreleasePool alloc] init]; \
+	} 
+
+
 @implementation TSAutoreleasePool
 
++(id) currentPool
+{
+	GETCURRENTPOOL
+	return pool;
+}
+
+-(id)init
+{
+	_addImp = (void (*)(id, SEL, id)) [self methodForSelector: @selector(addObject:)];
+
+	_released = TSDefaultMalloc( sizeof(array_list_struct) + (sizeof(id) * BEGINNING_POOL_SIZE)  );
+      /* Currently no NEXT array in the list, so NEXT == NULL. */
+	_released->next = NULL;
+	_released->size = BEGINNING_POOL_SIZE;
+	_released->count = 0;
+	_released_count = 0;
+
+	_released_head = _released;
+}
+
++(void) addObject:(id)anObj
+{
+	GETCURRENTPOOL
+	//call the addObject method - this should be faster than sending a message
+	(*pool->_addImp)(pool, @selector(addObject:), anObj);
+}
 
 -(void) addObject: (id)anObj
 {
@@ -28,8 +66,7 @@ typedef struct autorelease_array_list
 			unsigned new_size = _released->size * 2;
 
 			new_released = (struct autorelease_array_list*)
-			NSZoneMalloc(NSDefaultMallocZone(),
-			sizeof(struct autorelease_array_list) + (new_size * sizeof(id)));
+			TSDefaultMalloc(sizeof(struct autorelease_array_list) + (new_size * sizeof(id)));
 			new_released->next = NULL;
 			new_released->size = new_size;
 			new_released->count = 0;
