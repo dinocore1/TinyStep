@@ -5,6 +5,7 @@
 struct autorelease_array_list;
 @interface TSAutoreleasePool : TSObject {
 	TSAutoreleasePool* _parent;
+	TSAutoreleasePool* _child;
 	struct autorelease_array_list* _released;
 	struct autorelease_array_list* _released_head;
 	unsigned int _released_count;
@@ -17,6 +18,8 @@ struct autorelease_array_list;
 +(void) addObject: (id)anObj;
 
 -(void) addObject: (id)anObj;
+
+-(void) emptyPool;
 
 
 @end
