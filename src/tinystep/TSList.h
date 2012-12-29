@@ -23,7 +23,7 @@
  * the items currently at that position (if any) and any
  * subsequent items to the right (adds one to their indices).
  */
--(void) add:(unsigned int) index obj:(id) obj;
+-(void) add:(id) obj index:(unsigned int) index;
 
 /*
  * removes the item at index and returns
@@ -35,6 +35,11 @@
  * list with the specified element
  */
 -(id) set:(unsigned int) index obj:(id)obj;
+
+/*
+ * Returns the item at the specified position.
+ */
+-(id) getAt:(unsigned int) index;
 
 
 @end

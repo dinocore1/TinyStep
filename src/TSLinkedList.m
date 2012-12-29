@@ -1,5 +1,6 @@
 
 #import <tinystep/TSLinkedList.h>
+#import <tinystep/TSMemZone.h>
 
 typedef struct TSLinkedListNode {
 	struct TSLinkedListNode* _prev;
@@ -9,6 +10,17 @@ typedef struct TSLinkedListNode {
 
 
 @implementation TSLinkedList
+
+static inline
+TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
+{
+	int i;
+	TSLinkedListNode* retval = list->_start;
+	for(i=0;i<index;i++) {
+		retval = retval->_next;
+	}
+	return retval;
+}
 
 -(id) init
 {
@@ -24,44 +36,116 @@ typedef struct TSLinkedListNode {
 	return _size;
 }
 
+-(void) clear
+{
+	TSLinkedListNode* node = _start;
+	TSLinkedListNode* temp = NULL;
+	while(node != NULL) {
+		temp = node;
+		node = node->_next;
+		[temp->_data release];
+		TSDefaultFree(temp);
+	}
+	_start = NULL;
+	_end = NULL;
+	_size = 0;
+}
+
 -(void)add:(id) obj
 {
-	TSLinkedListNode* node = malloc(sizeof(TSLinkedListNode));
+	TSLinkedListNode* node = TSDefaultMalloc(sizeof(TSLinkedListNode));
 	memset(node, 0, sizeof(TSLinkedListNode));
 	node->_data = [obj retain];
 	node->_prev = _end;
-	_end->_next = node;
+
+	if(_end != NULL) {
+		_end->_next = node;
+	}
 	_end = node;
 	if(_size == 0){
 		_start = node;
 	}
+
+	_size++;
 }
 
-static inline
-TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
+-(void) add:(id) obj index:(unsigned int) index
 {
-	int i;
-	TSLinkedListNode* retval = list->_start;
-	for(i=0;i<index;i++) {
-		retval = retval->_next;
+	TSLinkedListNode* newnode = TSDefaultMalloc(sizeof(TSLinkedListNode));
+	memset(newnode, 0, sizeof(TSLinkedListNode));
+	newnode->_data = [obj retain];
+
+	TSLinkedListNode* n = find(self, index);
+
+	newnode->_next = n;
+	if(n != nil){
+		n->_prev->_next = newnode;
+		newnode->_prev = n->_prev;
+		n->_prev = newnode;
 	}
-	return retval;
+	
+	if(index == 0) {
+		_size = newnode;
+	}
+
+	if(index == _size) {
+		_end = newnode;
+	}
+
+	_size++;
 }
 
 -(id) remove:(unsigned int)index
 {
-	TSLinkedListNode* n = find(self, index);
-	id retval = [n->_data autorelease];
+	id retval = nil;
+	if(index >=0 && index < _size) {
+		TSLinkedListNode* n = find(self, index);
+		retval = [n->_data autorelease];
 
-	TSLinkedListNode* prev = n->_prev;
-	TSLinkedListNode* next = n->_next;
+		TSLinkedListNode* prev = n->_prev;
+		TSLinkedListNode* next = n->_next;
 
-	prev->_next = next;
-	next->_prev = prev;
+		prev->_next = next;
+		next->_prev = prev;
 
-	free(n);
+		TSDefaultFree(n);
+
+		_size--;
+	}
 
 	return retval;
+
+}
+
+-(id) set:(unsigned int) index obj:(id) obj
+{
+	id retval = nil;
+	TSLinkedListNode* n = find(self, index);
+	if(n != nil) {
+		retval = [n->_data autorelease];
+		n->_data = [obj retain];
+	} else {
+		TSLinkedListNode* newnode = TSDefaultMalloc(sizeof(TSLinkedListNode));
+		memset(newnode, 0, sizeof(TSLinkedListNode));
+		newnode->_data = [obj retain];
+	}
+	return retval;
+}
+
+-(id) getAt:(unsigned int) index
+{
+	id retval = nil;
+	TSLinkedListNode* n = find(self, index);
+	if(n != nil){
+		retval = n->_data;
+	}
+	return retval;
+}
+
+-(void)dealloc
+{
+	[self clear];
+	[super dealloc];
 }
 
 @end

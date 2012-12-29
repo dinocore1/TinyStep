@@ -1,5 +1,6 @@
 
 #import <tinystep/TSString.h>
+#import <tinystep/TSMemZone.h>
 #import <stdlib.h>
 #import <string.h>
 
@@ -10,7 +11,7 @@
     self = [super init];
     if(self) {
         _capacity = strlen(str) * sizeof(char);
-        _buf = malloc(_capacity);
+        _buf = TSDefaultMalloc(_capacity);
         memcpy(_buf, str, _capacity);
     }
     return self;
@@ -24,7 +25,7 @@
 -(void) dealloc
 {
 	if(_buf) {
-		free(_buf);
+		TSDefaultFree(_buf);
 	}
 	_capacity = -1;
 	[super dealloc];
