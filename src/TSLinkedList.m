@@ -149,4 +149,20 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 	[super dealloc];
 }
 
+-(void) iterator:(lliterator*) it
+{
+	it->node = _start;
+}
+
+-(BOOL) next:(lliterator*) it obj:(id*)objptr
+{
+	BOOL retval = NO;
+	if(it->node != nil) {
+		*objptr = it->node->_data;
+		it->node = it->node->_next;
+		retval = YES;
+	}
+	return retval;
+}
+
 @end

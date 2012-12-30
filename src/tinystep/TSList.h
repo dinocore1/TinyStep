@@ -1,5 +1,4 @@
 
-#import <tinystep/TSObject.h>
 
 @protocol TSList
 

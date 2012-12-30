@@ -24,5 +24,8 @@
 
 -(IMP)methodForSelector:(SEL)aSelector;
 
+-(unsigned int) hash;
+-(BOOL) isEqual:(id) obj;
+
 @end
 

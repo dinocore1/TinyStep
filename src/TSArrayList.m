@@ -113,4 +113,20 @@ _objarray = TSDefaultRealloc(_objarray, sizeof(id) * _capacity);
 	return retval;
 }
 
+-(void) iterator:(aliterator*) it
+{
+	it->index = 0;
+}
+
+-(BOOL) next:(aliterator*) it obj:(id*)objptr
+{
+	BOOL retval = NO;
+	if(it->index < _size) {
+		*objptr = _objarray[it->index];
+		it->index++;
+		retval = YES;
+	}
+	return retval;
+}
+
 @end

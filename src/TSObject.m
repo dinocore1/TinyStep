@@ -190,5 +190,15 @@ static IMP autorelease_imp;
    return class_getMethodImplementation(object_getClass(self), aSelector);
 }
 
+-(unsigned int) hash
+{
+	return self;
+}
+
+-(BOOL) isEqual:(id) obj
+{
+	return self == obj;
+}
+
 @end
 
