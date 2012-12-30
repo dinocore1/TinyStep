@@ -4,12 +4,14 @@
 
 typedef struct TSMemZone {
 	void* (*malloc)(size_t size);
+	void* (*realloc)(void* ptr, size_t size);
 	void (*free)(void* ptr);
 	const char* name;
 } TSMemZone;
 
 static TSMemZone defaultZone = {
 	malloc,
+	realloc,
 	free,
 	"default zone"
 };
@@ -25,6 +27,12 @@ void*
 TSMalloc(TSMemZone* zone, size_t size)
 {
 	return zone->malloc(size);
+}
+
+void*
+TSRealloc(TSMemZone* zone, void* ptr, size_t size)
+{
+	return zone->realloc(ptr, size);
 }
 
 void

@@ -1,6 +1,7 @@
 
 #import <tinystep/TSLinkedList.h>
 #import <tinystep/TSMemZone.h>
+#import <string.h>
 
 typedef struct TSLinkedListNode {
 	struct TSLinkedListNode* _prev;
@@ -78,14 +79,14 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 	TSLinkedListNode* n = find(self, index);
 
 	newnode->_next = n;
-	if(n != nil){
+	if(n != NULL){
 		n->_prev->_next = newnode;
 		newnode->_prev = n->_prev;
 		n->_prev = newnode;
 	}
 	
 	if(index == 0) {
-		_size = newnode;
+		_start = newnode;
 	}
 
 	if(index == _size) {
@@ -121,7 +122,7 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 {
 	id retval = nil;
 	TSLinkedListNode* n = find(self, index);
-	if(n != nil) {
+	if(n != NULL) {
 		retval = [n->_data autorelease];
 		n->_data = [obj retain];
 	} else {
@@ -136,7 +137,7 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 {
 	id retval = nil;
 	TSLinkedListNode* n = find(self, index);
-	if(n != nil){
+	if(n != NULL){
 		retval = n->_data;
 	}
 	return retval;

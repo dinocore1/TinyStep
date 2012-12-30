@@ -9,6 +9,7 @@
 +(Class)class;
 +(Class)superclass;
 +alloc;
++(id)new;
 
 -self;
 -(Class)class;

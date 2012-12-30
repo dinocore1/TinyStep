@@ -8,7 +8,10 @@ extern "C" {
 struct TSMemZone;
 
 TSEXPORT void* 
-TSMalloc(struct TSMemZone* zone, unsigned int size);
+TSMalloc(struct TSMemZone* zone, size_t size);
+
+TSEXPORT void*
+TSRealloc(struct TSMemZone* zone, void* ptr, size_t size);
 
 TSEXPORT void
 TSFree(struct TSMemZone* zone, void* ptr);
@@ -21,4 +24,5 @@ TSDefaultZone();
 #endif
 
 #define TSDefaultMalloc(size) TSMalloc(TSDefaultZone(), size)
+#define TSDefaultRealloc(ptr, size) TSRealloc(TSDefaultZone(), ptr, size);
 #define TSDefaultFree(ptr) TSFree(TSDefaultZone(), ptr)

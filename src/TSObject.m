@@ -123,6 +123,11 @@ static IMP autorelease_imp;
 	return TSAllocateObject([self class], 0);
 }
 
++(id)new
+{
+	return [[self alloc] init];
+}
+
 -self 
 {
    return self;

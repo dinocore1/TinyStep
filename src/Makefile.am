@@ -10,7 +10,8 @@ pkginclude_HEADERS = \
 	tinystep/TSAutoreleasePool.h \
 	tinystep/TSString.h \
 	tinystep/TSList.h \
-	tinystep/TSLinkedList.h
+	tinystep/TSLinkedList.h \
+	tinystep/TSArrayList.h
 
 libtinystep_la_SOURCES = \
 	tinystep/TinyStep.h \
@@ -19,7 +20,8 @@ libtinystep_la_SOURCES = \
 	TSThread.m tinystep/TSThread.h \
 	TSAutoreleasePool.m tinystep/TSAutoreleasePool.h \
 	TSString.m tinystep/TSString.h \
-	TSLinkedList.m TSLinkedList.h
+	TSLinkedList.m TSLinkedList.h \
+	TSArrayList.m TSArrayList.h
 
 libtinystep_la_CPPFLAGS = $(OBJC_CFLAGS)
 libtinystep_la_LDFLAGS = $(OBJC_LIBS)

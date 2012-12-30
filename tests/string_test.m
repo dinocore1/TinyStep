@@ -12,7 +12,7 @@ TSString* makeAString()
 int main(int argv, const char** argc)
 {
    TSAutoreleasePool* pool = [[TSAutoreleasePool alloc] init];
-   int i=0;
+   int i;
    for(i=0;i<10;i++){
    		
    		TSString* str = makeAString();

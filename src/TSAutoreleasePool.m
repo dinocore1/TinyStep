@@ -193,16 +193,16 @@ typedef struct autorelease_array_list
 	[super dealloc];
 }
 
-
-//retains, release, and autorelease dont do anything
--(id)retain
-{
-
-}
 -(void)release
 {
-
+	[self dealloc];
 }
+
+//retains, and autorelease dont do anything
+-(id)retain
+{
+}
+
 -(id)autorelease
 {
 	return self;
