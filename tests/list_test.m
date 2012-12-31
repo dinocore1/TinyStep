@@ -9,8 +9,6 @@ int testList(id<TSList> list)
 {
 
 	int i;
-	id a = nil;
-	id b = nil;
 	id objarray[5];
 	for(i=0;i<5;i++){
 		char buf[10];

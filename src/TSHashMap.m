@@ -2,6 +2,7 @@
 #import <tinystep/TSHashMap.h>
 #import <tinystep/TSMemZone.h>
 #import <tinystep/TSArrayList.h>
+#import <tinystep/TSKeyValuePair.h>
 
 #define DEFAULT_TABLESIZE 32
 
@@ -31,6 +32,10 @@ betterhash(unsigned int key){
 	if(self) {
 		_table = TSDefaultMalloc( sizeof(TSArrayList*) * DEFAULT_TABLESIZE );
 		_tableSize = DEFAULT_TABLESIZE;
+		int i;
+		for(i=0;i<_tableSize;i++){
+			_table[i] = [TSArrayList new];
+		}
 	}
 	return self;
 }
@@ -42,12 +47,34 @@ betterhash(unsigned int key){
 
 -(void) clear
 {
-
+	int i;
+	for(i=0;i<_tableSize;i++){
+		TSArrayList* list = _table[i];
+		[list clear];
+	}
+	_size = 0;
 }
 
 -(id) put:(id)key value:(id)value
 {
+	id retval = nil;
+	unsigned int index = betterhash([key hash]) % _tableSize;
+	TSArrayList* list = _table[index];
 
+	TSKeyValuePair* kvp = nil;
+	aliterator it;
+	[list iterator:&it];
+	while([list next:&it obj:&kvp]){
+		if([kvp.key isEqual:key]){
+			retval = [[list remove:it.index] value];
+			_size--;
+			break;
+		}
+	}
+
+	[list add: [[TSKeyValuePair alloc] initWithPair:key value:value] ];
+	_size++;
+	return retval;
 }
 
 -(id) get:(id)key
@@ -56,12 +83,12 @@ betterhash(unsigned int key){
 	unsigned int index = betterhash([key hash]) % _tableSize;
 	TSArrayList* list = _table[index];
 
-	id obj = nil;
+	TSKeyValuePair* kvp = nil;
 	aliterator it;
 	[list iterator:&it];
-	while([list next:&it obj:&obj]){
-		if([obj isEqual:key]){
-			retval = obj;
+	while([list next:&it obj:&kvp]){
+		if([kvp.key isEqual:key]){
+			retval = kvp.value;
 			break;
 		}
 	}
