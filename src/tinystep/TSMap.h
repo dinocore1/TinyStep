@@ -24,4 +24,11 @@
  */
 -(id) get:(id)key;
 
+/*
+ * Removes the mapping for a key from this map if it is present.
+ * @returns the previous value associated with key or nil if there was
+ * no maping for key
+ */
+-(id) remove:(id)key;
+
 @end
