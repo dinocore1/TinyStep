@@ -6,22 +6,33 @@
 int main(int argv, const char** argc)
 {
 	int i;
-	id objarray[5];
+	id keyarry[5];
 	for(i=0;i<5;i++){
 		char buf[10];
-		sprintf(buf, "str %d", i);
-		objarray[i] = [[TSString alloc] initWithCString:buf];
+		sprintf(buf, "key %d", i);
+		keyarry[i] = [[TSString alloc] initWithCString:buf];
+	}
+
+	id valuearray[5];
+	for(i=0;i<5;i++){
+		char buf[10];
+		sprintf(buf, "value %d", i);
+		valuearray[i] = [[TSString alloc] initWithCString:buf];
 	}
 
 	TSHashMap* hm = [TSHashMap new];
 
-	[hm put:objarray[0] value:objarray[0]];
-	ASSERT([hm get:objarray[0]] == objarray[0])
+	[hm put:keyarry[0] value:valuearray[0]];
+	ASSERT([hm get:keyarry[0]] == valuearray[0])
 	ASSERT(hm.size == 1)
 
-	[hm put:objarray[1] value:objarray[1]];
-	ASSERT([hm get:objarray[1]] == objarray[1])
+	[hm put:keyarry[1] value:valuearray[1]];
+	ASSERT([hm get:keyarry[1]] == valuearray[1])
 	ASSERT(hm.size == 2)
+
+	[hm remove:keyarry[1]];
+	ASSERT(hm.size == 1)
+	ASSERT([hm get:keyarry[0]] == valuearray[0])
 
 	return 0;
 }

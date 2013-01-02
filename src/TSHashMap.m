@@ -87,13 +87,13 @@ betterhash(unsigned int key){
 			TSArrayList* t = tmpTable[i];
 			[t iterator:&it];
 			while([t next:&it obj:&kvp]){
-				[self add:kvp.key value:kvp.value];
+				[self put:kvp.key value:kvp.value];
 			}
 			[t release];
 		}
 		TSDefaultFree(tmpTable);
 
-		return [self add:key value:value];
+		return [self put:key value:value];
 	}
 
 	[list add: [[TSKeyValuePair alloc] initWithPair:key value:value] ];

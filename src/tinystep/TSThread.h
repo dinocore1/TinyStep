@@ -14,7 +14,7 @@ typedef struct autorelease_thread_vars
 @interface TSThread : TSObject {
 
 #ifdef THREAD_SUPPORT
-	pthread_t thread_obj;
+	pthread_t _thread_obj;
 #endif
 
 	id _target;
@@ -34,6 +34,7 @@ typedef struct autorelease_thread_vars
 
 #ifdef THREAD_SUPPORT
 -(void)start;
+-(void)join;
 #endif
 
 @end
