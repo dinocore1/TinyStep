@@ -2,6 +2,7 @@
 #import <tinystep/TSObject.h>
 #import <tinystep/TSMemZone.h>
 #import <tinystep/TSAutoreleasePool.h>
+#import <tinystep/TSThread.h>
 #import <objc/runtime.h>
 #import <stdlib.h>
 #import <string.h>
@@ -101,6 +102,8 @@ static IMP autorelease_imp;
 +(void) initialize
 {
 	if(self == [TSObject class]) {
+		TSThread* mainThread = [TSThread currentThread];
+		
 		autorelease_class = [TSAutoreleasePool class];
 		autorelease_sel = @selector(addObject:);
 		autorelease_imp = [autorelease_class methodForSelector: autorelease_sel];

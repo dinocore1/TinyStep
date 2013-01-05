@@ -15,7 +15,7 @@ typedef struct autorelease_array_list
 } array_list_struct;
 
 #define GETCURRENTPOOL \
-	TSThread *t = TSCurrentThread(); \
+	TSThread *t = [TSThread currentThread]; \
 	TSAutoreleasePool *pool; \
 	pool = t->_autorelease_thread_vars.current_pool; \
 	if(pool == nil){ \
@@ -33,24 +33,27 @@ typedef struct autorelease_array_list
 
 -(id)init
 {
-	_addImp = (void (*)(id, SEL, id)) [self methodForSelector: @selector(addObject:)];
+	self = [super init];
+	if(self) {
+		_addImp = (void (*)(id, SEL, id)) [self methodForSelector: @selector(addObject:)];
 
-	_released = TSDefaultMalloc( sizeof(array_list_struct) + (sizeof(id) * BEGINNING_POOL_SIZE)  );
-      /* Currently no NEXT array in the list, so NEXT == NULL. */
-	_released->next = NULL;
-	_released->size = BEGINNING_POOL_SIZE;
-	_released->count = 0;
-	_released_count = 0;
+		_released = TSDefaultMalloc( sizeof(array_list_struct) + (sizeof(id) * BEGINNING_POOL_SIZE)  );
+	      /* Currently no NEXT array in the list, so NEXT == NULL. */
+		_released->next = NULL;
+		_released->size = BEGINNING_POOL_SIZE;
+		_released->count = 0;
+		_released_count = 0;
 
-	_released_head = _released;
+		_released_head = _released;
 
-	TSThread *t = TSCurrentThread();
-	_parent = t->_autorelease_thread_vars.current_pool;
-	if(_parent != nil) {
-		_parent->_child = self;
-	} 
+		TSThread *t = [TSThread currentThread];
+		_parent = t->_autorelease_thread_vars.current_pool;
+		if(_parent != nil) {
+			_parent->_child = self;
+		} 
 
-	t->_autorelease_thread_vars.current_pool = self;
+		t->_autorelease_thread_vars.current_pool = self;
+	}
 
 	return self;
 }
@@ -181,7 +184,7 @@ typedef struct autorelease_array_list
 	}
 	_released = _released_head = nil;
 
-	TSThread *t = TSCurrentThread();
+	TSThread *t = [TSThread currentThread];
 	if(t->_autorelease_thread_vars.current_pool == self) {
     	t->_autorelease_thread_vars.current_pool = _parent;
     }

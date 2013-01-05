@@ -8,7 +8,7 @@
 
 @implementation TSHashMap
 
-unsigned int inline 
+static unsigned int inline 
 betterhash(unsigned int key){
 	/* Robert Jenkins' 32 bit Mix Function */
 	key += (key << 12);

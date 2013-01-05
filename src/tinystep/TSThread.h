@@ -39,5 +39,3 @@ typedef struct autorelease_thread_vars
 
 @end
 
-TSEXPORT TSThread*
-TSCurrentThread();

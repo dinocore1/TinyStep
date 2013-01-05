@@ -3,60 +3,45 @@
 #import <tinystep/TSAutoreleasePool.h>
 #import <objc/runtime.h>
 
-static BOOL threads_setup = NO;
+
 static TSThread* mainthread = nil;
 #ifdef THREAD_SUPPORT
 static pthread_key_t thread_object_key;
 #endif
-
-TSThread*
-TSCurrentThread()
-{
-	TSThread* retval = nil;
-#ifdef THREAD_SUPPORT
-	if(threads_setup == NO){
-		pthread_key_create(&thread_object_key, NULL);
-		threads_setup = YES;
-	}
-
-	retval = pthread_getspecific(thread_object_key);
-	if(retval == NULL){
-		retval = mainthread = [[TSThread alloc] init];
-		pthread_setspecific(thread_object_key, retval);
-	}
-
-#else
-	if(threads_setup == NO){
-		retval = mainthread = [[TSThread alloc] init];
-		threads_setup = YES;
-	}
-
-#endif
-
-	return retval;
-}
 
 
 @implementation TSThread
 
 +(void) initialize
 {
-	[self currentThread];
+	mainthread = [TSThread new];
+#ifdef THREAD_SUPPORT
+	pthread_key_create(&thread_object_key, NULL);
+	pthread_setspecific(thread_object_key, mainthread);
+#endif
+	
 }
 
 -(id) init
 {
-	_target = nil;
-	_argument = nil;
+	self = [super init];
+	if(self){
+		_target = nil;
+		_argument = nil;
+	}
+	return self;
 }
 
 -(id) initWithTarget:(id)aTarget
 			selector:(SEL)aSelector
 			object:(id)anArgument
 {
-	_target = RETAIN(aTarget);
-	_selector = aSelector;
-	_argument = RETAIN(anArgument);
+	self = [super init];
+	if(self) {
+		_target = RETAIN(aTarget);
+		_selector = aSelector;
+		_argument = RETAIN(anArgument);
+	}
 
 	return self;
 }
@@ -71,12 +56,19 @@ TSCurrentThread()
 
 +(TSThread*)currentThread
 {
-	return TSCurrentThread();
+	TSThread* retval = nil;
+#ifdef THREAD_SUPPORT
+	retval = pthread_getspecific(thread_object_key);
+#else
+	retval = mainthread;
+#endif
+	return retval;
 }
 
 #ifdef THREAD_SUPPORT
 
-#define OBJCSENDMESSAGE(obj, selector, ...) objc_msg_lookup(obj, selector)(obj, selector, __VA_ARGS__)
+
+#define OBJCSENDMESSAGE(obj, selector, ...) objc_msgSend(obj, selector, __VA_ARGS__)
 
 void* TSThreadStart(void* obj)
 {
