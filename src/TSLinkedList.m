@@ -106,8 +106,17 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 		TSLinkedListNode* prev = n->_prev;
 		TSLinkedListNode* next = n->_next;
 
-		prev->_next = next;
-		next->_prev = prev;
+		if(prev != NULL) {
+			prev->_next = next;
+		} else {
+			_start = next;
+		}
+
+		if(next != NULL) {
+			next->_prev = prev;
+		} else {
+			_end = prev;
+		}
 
 		TSDefaultFree(n);
 
@@ -157,11 +166,45 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 -(BOOL) next:(lliterator*) it obj:(id*)objptr
 {
 	BOOL retval = NO;
-	if(it->node != nil) {
+	if(it->node != NULL) {
 		*objptr = it->node->_data;
 		it->node = it->node->_next;
 		retval = YES;
 	}
+	return retval;
+}
+
+-(void) enqueue:(id) obj;
+{
+	TSLinkedListNode* newnode = TSDefaultMalloc(sizeof(TSLinkedListNode));
+	memset(newnode, 0, sizeof(TSLinkedListNode));
+	newnode->_data = [obj retain];
+
+	if(_size == 0){
+		_start = newnode;
+		_end = newnode;
+	} else {
+		_end->_next = newnode;
+		newnode->_prev = _end;
+		_end = newnode;
+	}
+
+	_size++;
+}
+
+-(id) dequeue
+{
+	id retval = nil;
+	if(_size > 0){
+		retval = [_start->_data autorelease];
+
+		TSLinkedListNode* next = _start->_next;
+		next->_prev = NULL;
+		TSDefaultFree(_start);
+		_start = next;
+		_size--;
+	}
+
 	return retval;
 }
 

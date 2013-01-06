@@ -1,7 +1,14 @@
 #import <objc/runtime.h>
 #import <tinystep/TSConfig.h>
 
-@interface TSObject {
+@protocol TSObject 
+-(id)retain;
+-(void)release;
+-(id)autorelease;
+-(int)retainCount;
+@end
+
+@interface TSObject <TSObject> {
 	Class isa;
 }
 
@@ -17,10 +24,7 @@
 -(id)init;
 -(void)dealloc;
 
--(id)retain;
--(void)release;
--(id)autorelease;
--(int)retainCount;
+
 
 -(IMP)methodForSelector:(SEL)aSelector;
 
