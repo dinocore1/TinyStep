@@ -10,8 +10,9 @@
 {
     self = [super init];
     if(self) {
-        _capacity = strlen(str) * sizeof(char);
+        _capacity = strlen(str) * sizeof(char) + 1;
         _buf = TSDefaultMalloc(_capacity);
+        memset(_buf, 0, _capacity);
         memcpy(_buf, str, _capacity);
     }
     return self;

@@ -53,7 +53,7 @@
 	self = [super init];
 	if(self) {
 		_queue = [TSLinkedList new];
-		_lock = [TSLock new];
+		_lock = [TSCondition new];
 		_maxConcurrent = 1;
 		_workerThreads = [[TSArrayList alloc] initWithCapacity:_maxConcurrent];
 		_status = IDLE;
@@ -94,6 +94,7 @@
 {
 	[_lock lock];
 	_status = STOPPING;
+	[_lock signalAll];
 	[_lock unlock];
 
 	aliterator it;
@@ -114,22 +115,30 @@
 	return retval;
 }
 
+-(FutureImp*) getNextTask
+{
+	FutureImp* retval = nil;
+	[_lock lock];
+	while(_status == RUNNING){
+		if(_queue.size == 0){
+			[_lock wait];
+		} else {
+			retval = [_queue dequeue];
+			break;
+		}
+	}
+	[_lock unlock];
+	return retval;
+}
+
 -(void) runWorker
 {
-	while([self getStatus] == RUNNING) {
-
-		[_lock lock];
-		while(_queue.size == 0) {
-			[_lock wait];
-		}
+	FutureImp* future = nil;
+	while((future = [self getNextTask]) != nil) {
 
 		TSAutoreleasePool* pool = [TSAutoreleasePool new];
-		FutureImp* future = [_queue dequeue];
-		[_lock unlock];
-
 		
 		future->_retval = [future->_runnable run];
-		
 
 		RETAIN(future->_retval);
 		future->_isDone = YES;

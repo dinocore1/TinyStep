@@ -199,7 +199,9 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 		retval = [_start->_data autorelease];
 
 		TSLinkedListNode* next = _start->_next;
-		next->_prev = NULL;
+		if(next) {
+			next->_prev = NULL;
+		}
 		TSDefaultFree(_start);
 		_start = next;
 		_size--;
