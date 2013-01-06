@@ -47,3 +47,5 @@
 
 #define RETAIN(x) [x retain]
 #define RELEASE(x) [x release]
+
+#define OBJCSENDMESSAGE(obj, selector, ...) @OBJCSENDMESSAGE@

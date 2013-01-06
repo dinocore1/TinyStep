@@ -67,9 +67,6 @@ static pthread_key_t thread_object_key;
 
 #ifdef THREAD_SUPPORT
 
-
-#define OBJCSENDMESSAGE(obj, selector, ...) objc_msgSend(obj, selector, __VA_ARGS__)
-
 void* TSThreadStart(void* obj)
 {
 	TSThread* threadobj = (TSThread*) obj;
@@ -89,8 +86,9 @@ void* TSThreadStart(void* obj)
 -(void) start
 {
 	pthread_attr_t attr;
+	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-	pthread_create(&_thread_obj, NULL, TSThreadStart, self);
+	pthread_create(&_thread_obj, &attr, TSThreadStart, self);
 	pthread_attr_destroy(&attr);
 }
 

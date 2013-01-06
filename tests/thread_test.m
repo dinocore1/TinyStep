@@ -1,5 +1,9 @@
 #import <tinystep/TSThread.h>
+#import <tinystep/TSLock.h>
+#import <tinystep/TSCondition.h>
 
+
+static TSCondition* condition;
 
 @interface FunctionObj : TSObject {
 
@@ -12,13 +16,16 @@
 -(void) threadstart
 {
 	printf("hello from thread\n");
+	[condition lock];
+	[condition signal];
+	[condition unlock];
 }
 
 @end
 
 int main(int argv, const char** argc)
 {
-	//[TSThread currentThread];
+	condition = [TSCondition new];
 	FunctionObj* obj = [FunctionObj new];
 
 	TSThread* thread1 = [[TSThread alloc]
@@ -27,6 +34,10 @@ int main(int argv, const char** argc)
 							object: nil];
 
 	[thread1 start];
+
+	[condition lock];
+	[condition wait];
+	[condition unlock];
 
 	[thread1 join];
 

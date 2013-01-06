@@ -73,6 +73,34 @@ AC_SUBST(THREAD_SUPPORT)
 AC_SUBST(INCLUDE_PTHREAD)
 
 
+#macro used to send an objc message (may be slightly diffrent depending on platform)
+OBJCSENDMESSAGE="objc_msg_lookup(obj, selector)(obj, selector, __VA_ARGS__)"
+
+#
+# Platform specific setup
+#
+#############################
+#AC_CANONICAL_HOST
+# Check for which host we are on and setup a few things
+# specifically based on the host
+case $host_os in
+  darwin* )
+        # Do something specific for mac
+        OBJCSENDMESSAGE="objc_msgSend(obj, selector, __VA_ARGS__)"
+        ;;
+  linux*)
+        # Do something specific for linux
+        ;;
+   *BSD*)
+        # Do something specific for BSD
+        ;;
+    *)
+        #Default Case
+        AC_MSG_ERROR([Your platform is not currently supported])
+        ;;
+esac
+
+AC_SUBST(OBJCSENDMESSAGE)
 
 #output Makefiles
 AC_CONFIG_FILES([
