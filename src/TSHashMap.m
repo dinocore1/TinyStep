@@ -66,7 +66,7 @@ betterhash(unsigned int key){
 	[list iterator:&it];
 	while([list next:&it obj:&kvp]){
 		if([kvp.key isEqual:key]){
-			retval = [[kvp.value retain] autorelease];
+			retval = kvp.value;
 			[list remove:it.index];
 			_size--;
 			break;
@@ -131,7 +131,7 @@ betterhash(unsigned int key){
 	[list iterator:&it];
 	while([list next:&it obj:&kvp]){
 		if([kvp.key isEqual:key]){
-			retval = [[kvp.value retain] autorelease];
+			retval = kvp.value;
 			[list remove:it.index];
 			_size--;
 			break;

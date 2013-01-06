@@ -133,18 +133,22 @@
 
 -(void) runWorker
 {
+	TSAutoreleasePool* pool = [TSAutoreleasePool new];
+
 	FutureImp* future = nil;
 	while((future = [self getNextTask]) != nil) {
 
-		TSAutoreleasePool* pool = [TSAutoreleasePool new];
-		
 		future->_retval = [future->_runnable run];
 
 		RETAIN(future->_retval);
 		future->_isDone = YES;
 
-		[pool release];
+		[pool emptyPool];
+		
 	}
+	
+	[pool release];
+	
 }
 
 @end
