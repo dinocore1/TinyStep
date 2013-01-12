@@ -5,7 +5,7 @@
 	id _value;
 }
 
--(id) initWithPair:(id) key value:(id)value;
+-(id) initWithKey:(id) key value:(id)value;
 
 @property (readonly) id key;
 @property (readonly) id value;

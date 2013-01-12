@@ -1,4 +1,5 @@
-
+#import <tinystep/TSConfig.h>
+#import <tinystep/TSComparator.h>
 
 @protocol TSList
 
@@ -42,3 +43,12 @@
 
 
 @end
+
+TSEXPORT void
+TSListSwap(id<TSList> list, int a, int b);
+
+TSEXPORT void
+TSListSort(id<TSList> list, id<TSComparator> comparator);
+
+TSEXPORT void
+TSListShuffle(id<TSList> list);

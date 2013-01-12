@@ -3,7 +3,7 @@
 
 @implementation TSKeyValuePair
 
--(id) initWithPair:(id) key value:(id)value
+-(id) initWithKey:(id) key value:(id)value
 {
 	self = [super init];
 	if(self) {

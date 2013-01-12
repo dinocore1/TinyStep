@@ -10,6 +10,7 @@ pkginclude_HEADERS = \
 	tinystep/TSAutoreleasePool.h \
 	tinystep/TSString.h \
 	tinystep/TSList.h \
+	tinystep/TSComparator.h \
 	tinystep/TSLinkedList.h \
 	tinystep/TSArrayList.h \
 	tinystep/TSMap.h \
@@ -17,7 +18,7 @@ pkginclude_HEADERS = \
 	tinystep/TSHashMap.h \
 	tinystep/TSLock.h \
 	tinystep/TSCondition.h \
-	tinystep/TSOperationQueue.h
+	tinystep/TSOperationQueue.h 
 
 libtinystep_la_SOURCES = \
 	tinystep/TinyStep.h \
@@ -32,7 +33,8 @@ libtinystep_la_SOURCES = \
 	TSHashMap.m tinystep/TSHashMap.h \
 	TSLock.m tinystep/TSLock.h \
 	TSCondition.m tinystep/TSCondition.h \
-	TSOperationQueue.m tinystep/TSOperationQueue.h
+	TSOperationQueue.m tinystep/TSOperationQueue.h \
+	TSFunctions.m
 
 libtinystep_la_CPPFLAGS = $(OBJC_CFLAGS)
 libtinystep_la_LDFLAGS = $(OBJC_LIBS)

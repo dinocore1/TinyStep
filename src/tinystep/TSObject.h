@@ -1,6 +1,8 @@
 #import <objc/runtime.h>
 #import <tinystep/TSConfig.h>
 
+
+@class TSString;
 @protocol TSObject 
 -(id)retain;
 -(void)release;
@@ -25,11 +27,13 @@
 -(void)dealloc;
 
 
-
+-(TSString*) className;
 -(IMP)methodForSelector:(SEL)aSelector;
+-(BOOL)respondsToSelector:(SEL)aSelector;
 
 -(unsigned int) hash;
 -(BOOL) isEqual:(id) obj;
+-(TSString*) toString;
 
 @end
 

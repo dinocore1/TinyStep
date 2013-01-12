@@ -6,6 +6,7 @@
 #import <objc/runtime.h>
 #import <stdlib.h>
 #import <string.h>
+#import <tinystep/config.h>
 
 #import "atomicoperations.h"
 
@@ -182,6 +183,11 @@ static IMP autorelease_imp;
 	return TSRefCount(self) + 1;
 }
 
+-(TSString*) className
+{
+	return [[TSString alloc] initWithCString:class_getName([self class])];
+}
+
 - (IMP) methodForSelector: (SEL)aSelector
 {
   /*
@@ -193,6 +199,11 @@ static IMP autorelease_imp;
    return class_getMethodImplementation(object_getClass(self), aSelector);
 }
 
+-(BOOL)respondsToSelector:(SEL)aSelector
+{
+	return class_respondsToSelector([self class], aSelector);
+}
+
 -(unsigned int) hash
 {
 	return self;
@@ -201,6 +212,11 @@ static IMP autorelease_imp;
 -(BOOL) isEqual:(id) obj
 {
 	return self == obj;
+}
+
+-(TSString*) toString
+{
+	return [self className];
 }
 
 @end

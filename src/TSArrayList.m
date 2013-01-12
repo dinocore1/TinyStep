@@ -1,5 +1,6 @@
 #import <tinystep/TSArrayList.h>
 #import <tinystep/TSMemZone.h>
+#import <tinystep/TSString.h>
 
 #define DEFAULT_CAPACITY 32
 
@@ -126,6 +127,24 @@ _objarray = TSDefaultRealloc(_objarray, sizeof(id) * _capacity);
 		it->index++;
 		retval = YES;
 	}
+	return retval;
+}
+
+-(TSString*) toString
+{
+	TSString* retval = nil;
+	TSStringBuffer* buf = [TSStringBuffer new];
+	[buf appendCString:"[ "];
+	aliterator it;
+	[self iterator:&it];
+	id obj = nil;
+	while([self next:&it obj:&obj]){
+		[buf appendCString:[[obj toString] cString]];
+		[buf appendCString:", "];
+	}
+	[buf appendCString:"]"];
+	retval = [buf toString];
+	[buf release];
 	return retval;
 }
 

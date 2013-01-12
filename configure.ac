@@ -16,6 +16,7 @@ AC_ARG_ENABLE([debug],
   OBJCFLAGS+=" -g -O0"
   CFLAGS+=" -g -O0"
   CXXFLAGS+=" -g -O0"
+  AC_DEFINE([BUILD_DEBUG], [1], [enable debugging features])
   ]
 )
 

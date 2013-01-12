@@ -96,7 +96,7 @@ betterhash(unsigned int key){
 		return [self put:key value:value];
 	}
 
-	[list add: [[TSKeyValuePair alloc] initWithPair:key value:value] ];
+	[list add: [[TSKeyValuePair alloc] initWithKey:key value:value] ];
 	_size++;
 	return retval;
 }
