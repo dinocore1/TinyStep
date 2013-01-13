@@ -1,5 +1,6 @@
 
 #import <tinystep/TSObject.h>
+#import <tinystep/TSString.h>
 #import <tinystep/TSMemZone.h>
 #import <tinystep/TSAutoreleasePool.h>
 #import <tinystep/TSThread.h>
@@ -185,7 +186,7 @@ static IMP autorelease_imp;
 
 -(TSString*) className
 {
-	return [[TSString alloc] initWithCString:class_getName([self class])];
+	return [[[TSString alloc] initWithCString:class_getName([self class])] autorelease];
 }
 
 - (IMP) methodForSelector: (SEL)aSelector
@@ -206,7 +207,7 @@ static IMP autorelease_imp;
 
 -(unsigned int) hash
 {
-	return self;
+	return (unsigned int)self;
 }
 
 -(BOOL) isEqual:(id) obj

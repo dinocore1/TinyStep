@@ -1,5 +1,6 @@
 #import <tinystep/TSList.h>
-
+#import <tinystep/TSString.h>
+#import <tinystep/TSAutoreleasePool.h>
 
 
 int
@@ -56,15 +57,20 @@ TSListShuffle(id<TSList> list)
 
 #ifdef BUILD_DEBUG
 
-const char *_NSPrintForDebugger(id object)
-{
-  /* This is not really what _NSPrintForDebugger should do, but it
-     is a simple test if gdb can call this function */
-	if (object && [object respondsToSelector:@selector(toString)]) {
-    	return [[object toString] cString];
-	}
+static char debugbuf[1024];
 
-  return NULL;
+static const char*
+_NSPrintForDebugger(id object)
+{
+	if (object) {
+		TSAutoreleasePool* pool = [TSAutoreleasePool new];
+		TSString* str = [object toString];
+		const char* cstr = [str cString];
+		strncpy(debugbuf, cstr, 1024);
+		[pool release];
+    	return debugbuf;
+	}
+	return NULL;
 }
 
 #endif

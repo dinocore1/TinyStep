@@ -2,6 +2,60 @@
 #import <tinystep/TSMemZone.h>
 #import <tinystep/TSString.h>
 
+@interface TSArrayListIterator : TSObject<TSListIterator> {
+	TSArrayList* _list;
+	unsigned int _index;
+}
+
+-(id) initWithList:(TSArrayList*)list index:(unsigned int)index;
+
+@end
+
+@implementation TSArrayListIterator
+
+-(id) initWithList:(TSArrayList*)list index:(unsigned int)index
+{
+	self = [super init];
+	if(self){
+		_list = [list retain];
+		_index = index;
+	}
+	return self;
+}
+
+-(BOOL) hasNext
+{
+	return _index < [_list size];
+}
+
+-(id) next
+{
+	return [_list getAt:_index++];
+}
+
+-(void) remove
+{
+	[_list remove:_index++];
+}
+
+-(BOOL) hasPrevious
+{
+	return _index - 1 >= 0;
+}
+
+-(id) previous
+{
+	return [_list getAt:--_index];
+}
+
+-(void) dealloc
+{
+	RELEASE(_list);
+	[super dealloc];
+}
+
+@end
+
 #define DEFAULT_CAPACITY 32
 
 @implementation TSArrayList
@@ -114,20 +168,11 @@ _objarray = TSDefaultRealloc(_objarray, sizeof(id) * _capacity);
 	return retval;
 }
 
--(void) iterator:(aliterator*) it
+-(id<TSListIterator>) iterator
 {
-	it->index = 0;
-}
-
--(BOOL) next:(aliterator*) it obj:(id*)objptr
-{
-	BOOL retval = NO;
-	if(it->index < _size) {
-		*objptr = _objarray[it->index];
-		it->index++;
-		retval = YES;
-	}
-	return retval;
+	TSArrayListIterator* retval = [[TSArrayListIterator alloc]
+									initWithList:self index:0];
+	return [retval autorelease];
 }
 
 -(TSString*) toString
@@ -135,17 +180,16 @@ _objarray = TSDefaultRealloc(_objarray, sizeof(id) * _capacity);
 	TSString* retval = nil;
 	TSStringBuffer* buf = [TSStringBuffer new];
 	[buf appendCString:"[ "];
-	aliterator it;
-	[self iterator:&it];
-	id obj = nil;
-	while([self next:&it obj:&obj]){
+	id<TSIterator> it = [self iterator];
+	while([it hasNext]){
+		id obj = [it next];
 		[buf appendCString:[[obj toString] cString]];
 		[buf appendCString:", "];
 	}
 	[buf appendCString:"]"];
 	retval = [buf toString];
 	[buf release];
-	return retval;
+	return [retval autorelease];
 }
 
 @end

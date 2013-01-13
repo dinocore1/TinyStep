@@ -49,8 +49,8 @@ int testSortList(id<TSList> list)
 	[list clear];
 	ASSERT([list size] == 0)
 	int i;
-	id objarray[5];
-	for(i=0;i<5;i++){
+	id objarray[10];
+	for(i=0;i<10;i++){
 		char buf[10];
 		sprintf(buf, "str %d", i);
 		[list add: [[TSString alloc] initWithCString:buf]];
@@ -60,7 +60,7 @@ int testSortList(id<TSList> list)
 	TSListShuffle(list);
 	TSListSort(list, strComp);
 
-	for(i=0;i<5;i++){
+	for(i=0;i<10;i++){
 		char buf[10];
 		sprintf(buf, "str %d", i);
 		TSString* correctString = [[TSString alloc] initWithCString:buf];

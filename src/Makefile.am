@@ -9,6 +9,7 @@ pkginclude_HEADERS = \
 	tinystep/TSThread.h \
 	tinystep/TSAutoreleasePool.h \
 	tinystep/TSString.h \
+	tinystep/TSIterator.h \
 	tinystep/TSList.h \
 	tinystep/TSComparator.h \
 	tinystep/TSLinkedList.h \

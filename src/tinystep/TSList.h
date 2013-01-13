@@ -1,5 +1,14 @@
+#import <tinystep/TSObject.h>
 #import <tinystep/TSConfig.h>
 #import <tinystep/TSComparator.h>
+#import <tinystep/TSIterator.h>
+
+@protocol TSListIterator <TSIterator>
+
+-(BOOL) hasPrevious;
+-(id) previous;
+
+@end
 
 @protocol TSList
 
@@ -40,6 +49,11 @@
  * Returns the item at the specified position.
  */
 -(id) getAt:(unsigned int) index;
+
+/*
+ * Returns an iterator for this list
+ */
+-(id<TSListIterator>) iterator;
 
 
 @end

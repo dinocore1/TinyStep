@@ -62,12 +62,12 @@ betterhash(unsigned int key){
 	TSArrayList* list = _table[index];
 
 	TSKeyValuePair* kvp = nil;
-	aliterator it;
-	[list iterator:&it];
-	while([list next:&it obj:&kvp]){
+	id<TSListIterator> it = [list iterator];
+	while([it hasNext]){
+		kvp = [it next];
 		if([kvp.key isEqual:key]){
 			retval = kvp.value;
-			[list remove:it.index];
+			[it remove];
 			_size--;
 			break;
 		}
@@ -85,8 +85,9 @@ betterhash(unsigned int key){
 		}
 		for(i=0;i<tmpTableSize;i++){
 			TSArrayList* t = tmpTable[i];
-			[t iterator:&it];
-			while([t next:&it obj:&kvp]){
+			it = [t iterator];
+			while([it hasNext]){
+				kvp = [it next];
 				[self put:kvp.key value:kvp.value];
 			}
 			[t release];
@@ -108,9 +109,9 @@ betterhash(unsigned int key){
 	TSArrayList* list = _table[index];
 
 	TSKeyValuePair* kvp = nil;
-	aliterator it;
-	[list iterator:&it];
-	while([list next:&it obj:&kvp]){
+	id<TSListIterator> it = [list iterator];
+	while([it hasNext]){
+		kvp = [it next];
 		if([kvp.key isEqual:key]){
 			retval = kvp.value;
 			break;
@@ -127,12 +128,12 @@ betterhash(unsigned int key){
 	TSArrayList* list = _table[index];
 
 	TSKeyValuePair* kvp = nil;
-	aliterator it;
-	[list iterator:&it];
-	while([list next:&it obj:&kvp]){
+	id<TSListIterator> it = [list iterator];
+	while([it hasNext]){
+		kvp = [it next];
 		if([kvp.key isEqual:key]){
 			retval = kvp.value;
-			[list remove:it.index];
+			[it remove];
 			_size--;
 			break;
 		}

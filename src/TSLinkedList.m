@@ -10,6 +10,70 @@ typedef struct TSLinkedListNode {
 } TSLinkedListNode;
 
 
+@interface TSLinkedListIterator : TSObject<TSListIterator> {
+	TSLinkedList* _list;
+	TSLinkedListNode* _node;
+	unsigned int _index;
+}
+
+-(id) initWithList:(TSLinkedList*)list node:(TSLinkedListNode*)node;
+
+@end
+
+@implementation TSLinkedListIterator
+
+-(id) initWithList:(TSLinkedList*)list node:(TSLinkedListNode*)node
+{
+	self = [super init];
+	if(self) {
+		_list = [list retain];
+		_node = node;
+		_index = 0;
+	}
+	return self;
+}
+
+-(BOOL) hasNext
+{
+	return (_node != NULL && _node->_next != NULL);
+}
+
+-(id) next
+{
+	id retval = _node->_data;
+	_node = _node->_next;
+	_index++;
+	return retval;
+}
+
+-(BOOL) hasPrevious
+{
+	return (_node != NULL && _node->_prev != NULL);
+}
+
+-(id) previous
+{
+	_node = _node->_prev;
+	_index--;
+	return _node->_data;
+}
+
+-(void) remove
+{
+	if(_node != NULL){
+		_node = _node->_next;
+	}
+	[_list remove:_index];
+}
+
+-(void) dealloc
+{
+	RELEASE(_list);
+	[super dealloc];
+}
+
+@end
+
 @implementation TSLinkedList
 
 static inline
@@ -158,20 +222,11 @@ TSLinkedListNode* find(TSLinkedList* list, unsigned int index)
 	[super dealloc];
 }
 
--(void) iterator:(lliterator*) it
+-(id<TSListIterator>) iterator
 {
-	it->node = _start;
-}
-
--(BOOL) next:(lliterator*) it obj:(id*)objptr
-{
-	BOOL retval = NO;
-	if(it->node != NULL) {
-		*objptr = it->node->_data;
-		it->node = it->node->_next;
-		retval = YES;
-	}
-	return retval;
+	TSLinkedListIterator* retval = [[TSLinkedListIterator alloc]
+										initWithList:self node:_start];
+	return [retval autorelease];
 }
 
 -(void) enqueue:(id) obj;

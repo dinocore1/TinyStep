@@ -97,10 +97,10 @@
 	[_lock signalAll];
 	[_lock unlock];
 
-	aliterator it;
 	TSThread* t = nil;
-	[_workerThreads iterator:&it];
-	while([_workerThreads next:&it obj:&t]){
+	id<TSIterator> it = [_workerThreads iterator];
+	while([it hasNext]){
+		t = [it next];
 		[t join];
 	}
 

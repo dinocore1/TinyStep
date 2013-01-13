@@ -61,7 +61,6 @@
     self = [super init];
     if(self) {
         _buf = TSDefaultMalloc(DEFAULT_CAPACTIY);
-        //memset(_buf, 0, DEFAULT_CAPACTIY);
         _capacity = DEFAULT_CAPACTIY;
         _used = 0;
     }
@@ -77,7 +76,7 @@
         _capacity = newsize;
     }
     char* theStr = (char*)_buf;
-    strcat(&theStr[_used], str);
+    strcpy(&theStr[_used], str);
     _used += size;
 }
 
