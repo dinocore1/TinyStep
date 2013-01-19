@@ -57,7 +57,7 @@ TSListShuffle(id<TSList> list)
 
 #ifdef BUILD_DEBUG
 
-static char debugbuf[1024];
+static char TSDEBUG_printobjbuf[1024];
 
 static const char*
 _NSPrintForDebugger(id object)
@@ -66,9 +66,9 @@ _NSPrintForDebugger(id object)
 		TSAutoreleasePool* pool = [TSAutoreleasePool new];
 		TSString* str = [object toString];
 		const char* cstr = [str cString];
-		strncpy(debugbuf, cstr, 1024);
+		strncpy(TSDEBUG_printobjbuf, cstr, 1024);
 		[pool release];
-    	return debugbuf;
+    	return TSDEBUG_printobjbuf;
 	}
 	return NULL;
 }

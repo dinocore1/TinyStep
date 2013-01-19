@@ -7,7 +7,7 @@
 
 -(id) initWithKey:(id) key value:(id)value;
 
-@property (readonly) id key;
-@property (readonly) id value;
+-(id) key;
+-(id) value;
 
 @end

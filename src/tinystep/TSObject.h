@@ -1,6 +1,10 @@
 #import <objc/runtime.h>
 #import <tinystep/TSConfig.h>
 
+#ifdef BUILD_DEBUG
+long 
+TSGetNumLiveObjects();
+#endif
 
 @class TSString;
 @protocol TSObject 

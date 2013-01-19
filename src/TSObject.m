@@ -11,6 +11,22 @@
 
 #import "atomicoperations.h"
 
+#ifdef BUILD_DEBUG
+
+#if defined(GSATOMICREAD)
+	static gsatomic_t debug_liveobjs = 0;
+#else
+	static long debug_liveobjs = 0;
+#endif
+
+long
+TSGetNumLiveObjects()
+{
+	return debug_liveobjs;
+}
+
+#endif
+
 #ifdef ALIGN
 #undef ALIGN
 #endif
@@ -42,6 +58,16 @@ typedef	struct obj_layout *obj;
 
 static inline
 id TSAllocateObject(Class aClass, size_t extrabytes) {
+
+#ifdef BUILD_DEBUG
+	#if defined(GSATOMICREAD)
+		GSAtomicIncrement(&debug_liveobjs);
+	#else
+		debug_liveobjs++;
+	#endif
+#endif
+
+
 	int size = class_getInstanceSize(aClass) + extrabytes + sizeof(obj_layout);
 	id newobj = TSDefaultMalloc(size);
 	if(newobj) {
@@ -57,6 +83,16 @@ void TSDeallocObject(id anObject) {
 	object_setClass(anObject, (Class)(void*)0xdeadface);
 	obj o = &((obj)anObject)[-1];
 	TSDefaultFree(o);
+
+
+#ifdef BUILD_DEBUG
+	#if defined(GSATOMICREAD)
+		GSAtomicDecrement(&debug_liveobjs);
+	#else
+		debug_liveobjs--;
+	#endif
+#endif
+
 }
 
 static inline
