@@ -40,6 +40,18 @@ betterhash(unsigned int key){
 	return self;
 }
 
+-(void) dealloc
+{
+	int i;
+	for(i=0;i<_tableSize;i++){
+		TSArrayList* list = _table[i];
+		[list clear];
+		[list release];
+	}
+	TSDefaultFree(_table);
+	[super dealloc];
+}
+
 -(unsigned int) size
 {
 	return _size;
@@ -97,7 +109,9 @@ betterhash(unsigned int key){
 		return [self put:key value:value];
 	}
 
-	[list add: [[TSKeyValuePair alloc] initWithKey:key value:value] ];
+	kvp = [[TSKeyValuePair alloc] initWithKey:key value:value];
+	[list add: kvp];
+	[kvp release];
 	_size++;
 	return retval;
 }

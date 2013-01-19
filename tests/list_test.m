@@ -52,7 +52,7 @@ int testList(id<TSList> list)
 
 	long endobjs = TSGetNumLiveObjects();
 	long numleaked = endobjs-startobjs;
-	printf("num leaked objects %d\n", numleaked);
+	printf("num leaked objects %ld\n", numleaked);
 	ASSERT(numleaked == 0);
 
 	return 0;
@@ -94,7 +94,7 @@ int testSortList(id<TSList> list)
 
 	long endobjs = TSGetNumLiveObjects();
 	long numleaked = endobjs-startobjs;
-	printf("num leaked objects %d\n", numleaked);
+	printf("num leaked objects %ld\n", numleaked);
 	ASSERT(numleaked == 0);
 
 	return 0;
@@ -113,7 +113,7 @@ int main(int argv, const char** argc)
 	ASSERT(testSortList(ll) == 0)
 	[ll release];
 
-	printf("Num live objs %d\n", TSGetNumLiveObjects());
+	printf("Num live objs %ld\n", TSGetNumLiveObjects());
 
 	return 0;
 }
