@@ -1,6 +1,4 @@
-#import <tinystep/TSThread.h>
-#import <tinystep/TSLock.h>
-#import <tinystep/TSCondition.h>
+#import <tinystep/TinyStep.h>
 
 
 static TSCondition* condition;

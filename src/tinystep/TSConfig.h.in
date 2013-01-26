@@ -15,6 +15,12 @@
 @THREAD_SUPPORT@
 @INCLUDE_PTHREAD@
 
+#if defined(_WIN32) || defined(_WIN64)
+#define PATH_SEPARATOR "\\"
+#else
+#define PATH_SEPARATOR "/"
+#endif
+
 #ifndef __has_include
 #  define __has_include(x) 0
 #endif
@@ -49,3 +55,4 @@
 #define RELEASE(x) [x release]
 
 #define OBJCSENDMESSAGE(obj, selector, ...) @OBJCSENDMESSAGE@
+

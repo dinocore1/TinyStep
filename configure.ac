@@ -50,6 +50,36 @@ AC_SUBST(DEFINE_INT64_T)
 AC_SUBST(DEFINE_UINT64_T)
 AC_SUBST(DEFINE_INTPTR_T)
 
+
+#################### Filesystem support checks ################
+
+AC_ARG_ENABLE([filesystem-support],
+  AS_HELP_STRING([--disable-filesystem-support], [turns off filesystem support]),
+  [FILESYSTEM_SUPPORT="no"],
+  [FILESYSTEM_SUPPORT="yes"]
+)
+
+if test $FILESYSTEM_SUPPORT = yes ; then
+  AC_CHECK_HEADER([dirent.h],
+    AC_DEFINE(HAVE_DIRENT_H, 1, [Define to 1 if you have the <dirent.h> header file])
+  ,
+  AC_MSG_ERROR([dirent.h is required for filesystem support])
+  )
+
+  AC_CHECK_HEADER([sys/stat.h],
+    AC_DEFINE(HAVE_SYS_STAT_H, 1)
+  ,
+  AC_MSG_ERROR([sys/stat.h is required for filesystem support])
+  )
+
+  AC_DEFINE([FILESYSTEM_SUPPORT], [1], [define if you have file system])
+else
+  AC_DEFINE([FILESYSTEM_SUPPORT], [0], [define if you have file system])
+fi
+
+
+################### Thread support checks ######################
+
 AC_ARG_ENABLE([thread-support],
   AS_HELP_STRING([--disable-thread-support], [turns off thread support]),
   [THREAD_SUPPORT="no"],
@@ -63,7 +93,7 @@ if test $THREAD_SUPPORT = yes ; then
   INCLUDE_PTHREAD="#include <pthread.h>"
   ] 
   ,
-  AC_MSG_ERROR([pthread is required])
+  AC_MSG_ERROR([pthread is required for thread support])
   )
 else
   THREAD_SUPPORT=""
@@ -73,6 +103,7 @@ fi
 AC_SUBST(THREAD_SUPPORT)
 AC_SUBST(INCLUDE_PTHREAD)
 
+#################### Obj-c objc_msgSend ###########################
 
 #macro used to send an objc message (may be slightly diffrent depending on platform)
 OBJCSENDMESSAGE="objc_msg_lookup(obj, selector)(obj, selector, __VA_ARGS__)"

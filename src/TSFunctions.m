@@ -1,6 +1,4 @@
-#import <tinystep/TSList.h>
-#import <tinystep/TSString.h>
-#import <tinystep/TSAutoreleasePool.h>
+#import <tinystep/TinyStep.h>
 
 
 int
@@ -55,7 +53,7 @@ TSListShuffle(id<TSList> list)
 	}
 }
 
-#ifdef BUILD_DEBUG
+#if defined(BUILD_DEBUG)
 
 static char TSDEBUG_printobjbuf[1024];
 

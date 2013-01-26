@@ -1,6 +1,4 @@
-#import <tinystep/TSHashMap.h>
-#import <tinystep/TSString.h>
-#import <tinystep/TSAutoreleasePool.h>
+#import <tinystep/TinyStep.h>
 
 #define ASSERT(x) if(!(x)) { return 1; }
 

@@ -19,7 +19,8 @@ pkginclude_HEADERS = \
 	tinystep/TSHashMap.h \
 	tinystep/TSLock.h \
 	tinystep/TSCondition.h \
-	tinystep/TSOperationQueue.h 
+	tinystep/TSOperationQueue.h \
+	tinystep/TSFile.h
 
 libtinystep_la_SOURCES = \
 	tinystep/TinyStep.h \
@@ -35,6 +36,7 @@ libtinystep_la_SOURCES = \
 	TSLock.m tinystep/TSLock.h \
 	TSCondition.m tinystep/TSCondition.h \
 	TSOperationQueue.m tinystep/TSOperationQueue.h \
+	TSFile.m tinystep/TSFile.h \
 	TSFunctions.m
 
 libtinystep_la_CPPFLAGS = $(OBJC_CFLAGS)

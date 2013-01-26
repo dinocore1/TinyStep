@@ -1,7 +1,4 @@
-#import <tinystep/TSLinkedList.h>
-#import <tinystep/TSArrayList.h>
-#import <tinystep/TSString.h>
-#import <tinystep/TSAutoreleasePool.h>
+#import <tinystep/TinyStep.h>
 #include <stdio.h>
 
 #define ASSERT(x) if(!(x)) { return 1; }

@@ -1,5 +1,4 @@
-#import <tinystep/TSString.h>
-#import <tinystep/TSAutoreleasePool.h>
+#import <tinystep/TinyStep.h>
 
 
 TSString* makeAString()

@@ -1,5 +1,4 @@
-#import <tinystep/TSOperationQueue.h>
-#import <tinystep/TSString.h>
+#import <tinystep/TinyStep.h>
 
 @interface TestRunnable : TSObject<Runnable> {
 

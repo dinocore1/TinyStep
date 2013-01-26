@@ -1,6 +1,6 @@
 
-TESTS = string_test list_test map_test thread_test operationqueue_test
-check_PROGRAMS = string_test list_test map_test thread_test operationqueue_test
+TESTS = string_test list_test map_test thread_test operationqueue_test file_test
+check_PROGRAMS = string_test list_test map_test thread_test operationqueue_test file_test
 
 string_test_SOURCES = string_test.m
 string_test_LDADD = $(top_builddir)/src/libtinystep.la
@@ -26,3 +26,8 @@ operationqueue_test_SOURCES = operationqueue_test.m
 operationqueue_test_LDADD = $(top_builddir)/src/libtinystep.la
 operationqueue_test_OBJCFLAGS = -I$(top_srcdir)/src -I$(top_builddir)/src $(OBJC_CFLAGS)
 operationqueue_test_LDFLAGS = $(OBJC_LIBS)
+
+file_test_SOURCES = file_test.m
+file_test_LDADD = $(top_builddir)/src/libtinystep.la
+file_test_OBJCFLAGS = -I$(top_srcdir)/src -I$(top_builddir)/src $(OBJC_CFLAGS)
+file_test_LDFLAGS = $(OBJC_LIBS)
