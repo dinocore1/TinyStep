@@ -1,4 +1,5 @@
 AC_PREREQ(2.59)
+AC_CONFIG_MACRO_DIR([m4])
 AC_INIT(TinyStep, 0.1, paul@dev-smart.com)
 AC_CONFIG_HEADERS([src/tinystep/config.h]) #setup config header
 
