@@ -19,6 +19,7 @@
 
 
 #import <tinystep/TSCondition.h>
+#import <tinystep/TSTime.h>
 
 @implementation TSCondition
 
@@ -36,7 +37,7 @@
 -(void) dealloc
 {
 #ifdef THREAD_SUPPORT 
-	pthread_cond_destroy(&_mutex);
+	pthread_cond_destroy(&_condition);
 #endif
 	[super dealloc];
 }
@@ -45,6 +46,14 @@
 {
 #ifdef THREAD_SUPPORT
 	pthread_cond_wait(&_condition, &_mutex);
+#endif
+}
+
+-(void) waitFor:(double) seconds
+{
+#ifdef THREAD_SUPPORT
+    struct timespec time = TSDoubleToTimeSpec(seconds);
+    pthread_cond_timedwait(&_condition, &_mutex, &time);
 #endif
 }
 

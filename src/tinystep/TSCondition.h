@@ -27,6 +27,7 @@
 }
 
 -(void) wait;
+-(void) waitFor:(double) seconds;
 -(void) signal;
 -(void) signalAll;
 

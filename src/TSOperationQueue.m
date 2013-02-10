@@ -81,7 +81,15 @@
 	double at = fa->_runat;
 	double bt = fb->_runat;
 
-	return at-bt;
+	double diff = at-bt;
+	int retval = 0;
+	if(diff > 0.0){
+		retval = 1;
+	} else if(diff < 0.0) {
+		retval = -1;
+	}
+
+	return retval;
 }
 
 @end
@@ -123,7 +131,7 @@ static ClockTimeComparator* sClickTimeCompare;
 	FutureImp* retval = nil;
 	[_lock lock];
 	if(_status != STOPPING){
-		timespec nowtime;
+		struct timespec nowtime;
 		clock_gettime(CLOCK_MONOTONIC, &nowtime);
 		double runat = TSTimeSpecToDouble(nowtime) + secdelay;
 		retval = [[FutureImp alloc] initWithRunnable:task runat:runat];
@@ -185,14 +193,12 @@ static ClockTimeComparator* sClickTimeCompare;
 			[_lock wait];
 		} else {
 			retval = [_queue getAt:0];
-			timespec nowtime;
+			struct timespec nowtime;
 			clock_gettime(CLOCK_MONOTONIC, &nowtime);
 			double nowtimed = TSTimeSpecToDouble(nowtime);
 
 			if(retval->_runat > nowtimed){
-				[_lock unlock];
-				[TSThread sleep:retval->_runat-nowtimed];
-				[_lock lock];
+				[_lock waitFor:retval->_runat-nowtimed];
 			} else {
 				[_queue dequeue];
 				break;

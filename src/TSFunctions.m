@@ -74,16 +74,16 @@ TSListShuffle(id<TSList> list)
 }
 
 double
-TSTimeSpecToDouble(timespec ts)
+TSTimeSpecToDouble(struct timespec ts)
 {
 	double retval = (double)ts.tv_sec + (double)ts.tv_nsec / NSEC_PER_SECOND;
 	return retval;
 }
 
-timespec
+struct timespec
 TSDoubleToTimeSpec(double seconds)
 {
-	timespec retval;
+	struct timespec retval;
 	retval.tv_sec = floor(seconds);
 	retval.tv_nsec = (seconds - (double)retval.tv_sec) * NSEC_PER_SECOND;
 	return retval;
