@@ -19,6 +19,7 @@
 
 
 #import <tinystep/TSConfig.h>
+#import <tinystep/TSTime.h>
 
 #import <tinystep/TSMemZone.h>
 #import <tinystep/TSAutoreleasePool.h>

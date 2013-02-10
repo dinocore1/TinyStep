@@ -102,8 +102,7 @@ void* TSThreadStart(void* obj)
 {
 	TSThread* threadobj = (TSThread*) obj;
 	pthread_setspecific(thread_object_key, threadobj);
-	OBJCSENDMESSAGE(obj, @selector(realstart), nil);
-	pthread_exit(NULL);
+	return OBJCSENDMESSAGE(obj, @selector(realstart), nil);
 }
 
 -(void) realstart

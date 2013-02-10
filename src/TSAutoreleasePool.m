@@ -202,7 +202,7 @@ typedef struct autorelease_array_list
 		TSDefaultFree(a);
 		a = n;
 	}
-	_released = _released_head = nil;
+	_released = _released_head = NULL;
 
 	TSThread *t = [TSThread currentThread];
 	if(t->_autorelease_thread_vars.current_pool == self) {
@@ -224,6 +224,7 @@ typedef struct autorelease_array_list
 //retains, and autorelease dont do anything
 -(id)retain
 {
+	return nil;
 }
 
 -(id)autorelease

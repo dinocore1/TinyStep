@@ -21,6 +21,9 @@
 #import <tinystep/TinyStep.h>
 #import <tinystep/TSTime.h>
 
+#import <string.h>
+#import <math.h>
+
 int
 TSQuickSortPartition(id<TSList> list, id<TSComparator> comparator, int left, int right, int pivot)
 {
