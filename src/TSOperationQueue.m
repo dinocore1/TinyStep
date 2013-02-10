@@ -21,24 +21,28 @@
 #import <tinystep/TSOperationQueue.h>
 #import <tinystep/TSAutoreleasePool.h>
 #import <tinystep/TSThread.h>
+#import <tinystep/TSTime.h>
+
 
 @interface FutureImp : TSObject<Future> {
 @public
 	id<Runnable> _runnable;
 	id _retval;
 	BOOL _isDone;
+	double _runat;
 }
 
 @end
 
 @implementation FutureImp
 
--(id) initWithRunnable:(id<Runnable>)aRunnable
+-(id) initWithRunnable:(id<Runnable>)aRunnable runat:(double)runat;
 {
 	self = [super init];
 	if(self) {
 		_runnable = RETAIN(aRunnable);
 		_isDone = NO;
+		_runat = runat;
 	}
 	return self;
 }
@@ -62,11 +66,39 @@
 
 @end
 
+@interface ClockTimeComparator : TSObject<TSComparator> {
+}
+
+@end
+
+@implementation ClockTimeComparator
+
+-(int) compareObj:(id)a to:(id)b
+{
+	FutureImp* fa = (FutureImp*)a;
+	FutureImp* fb = (FutureImp*)b;
+
+	double at = fa->_runat;
+	double bt = fb->_runat;
+
+	return at-bt;
+}
+
+@end
+
 #define IDLE 0
 #define RUNNING 1
 #define STOPPING 2
 
 @implementation TSOperationQueue
+
+
+static ClockTimeComparator* sClickTimeCompare;
+
++(void)initialize
+{
+	sClickTimeCompare = [ClockTimeComparator new];
+}
 
 -(id) init
 {
@@ -83,16 +115,25 @@
 
 -(id<Future>) post:(id<Runnable>)task
 {
+	return [self postWithDelay:task delay:0.0];
+}
+
+-(id<Future>) postWithDelay:(id<Runnable>) task delay:(double)secdelay
+{
 	FutureImp* retval = nil;
 	[_lock lock];
 	if(_status != STOPPING){
-		retval = [[FutureImp alloc] initWithRunnable:task];
+		timespec nowtime;
+		clock_gettime(CLOCK_MONOTONIC, &nowtime);
+		double runat = TSTimeSpecToDouble(nowtime) + secdelay;
+		retval = [[FutureImp alloc] initWithRunnable:task runat:runat];
 		[_queue enqueue:retval];
+		TSListSort(_queue, sClickTimeCompare);
 		[_lock signalAll];
 	}
 	[_lock unlock];
 
-	return retval;
+	return [retval autorelease];
 }
 
 -(void) start
@@ -143,8 +184,19 @@
 		if(_queue.size == 0){
 			[_lock wait];
 		} else {
-			retval = [_queue dequeue];
-			break;
+			retval = [_queue getAt:0];
+			timespec nowtime;
+			clock_gettime(CLOCK_MONOTONIC, &nowtime);
+			double nowtimed = TSTimeSpecToDouble(nowtime);
+
+			if(retval->_runat > nowtimed){
+				[_lock unlock];
+				[TSThread sleep:retval->_runat-nowtimed];
+				[_lock lock];
+			} else {
+				[_queue dequeue];
+				break;
+			}
 		}
 	}
 	[_lock unlock];

@@ -86,4 +86,51 @@
 	return retval;
 }
 
+-(TSString*) absolutePath
+{
+	return _pathname;
+}
+
+@end
+
+@implementation TSRandomAccessFile
+
+-(id) initWithFile:(TSFile*) file mode:(const char*)mode
+{
+	self = [super init];
+	if(self) {
+		_file = [file retain];
+		_filehandle = fopen([[_file absolutePath] cString], mode);
+	}
+	return self;
+}
+
+-(void) dealloc
+{
+	if(_filehandle){
+		fclose(_filehandle);
+	}
+	[_file release];
+	[super dealloc];
+}
+
+-(size_t) read:(uint8_t*) buf len:(size_t)len
+{
+	return fread(buf, sizeof(uint8_t), len, _filehandle);
+}
+
+-(size_t) write:(uint8_t*) buf len:(size_t)len
+{
+	return fwrite(buf, sizeof(uint8_t), len, _filehandle);
+}
+
+-(BOOL) seek:(long int) offset origin:(int) origin
+{
+	BOOL retval;
+	int error = fseek(_filehandle, offset, origin);
+	retval = error == 0;
+	return retval;
+}
+
+
 @end

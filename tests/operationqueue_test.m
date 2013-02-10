@@ -27,7 +27,15 @@ int main(int argv, const char** argc)
 	id<Future> f2 = [queue post:[TestRunnable new]];
 
 	while(!f1.isDone || !f2.isDone){
-		printf("waiting for tasks to complete");
+		printf("waiting for tasks to complete\n");
+		sleep(1);
+	}
+
+	f1 = [queue postWithDelay:[TestRunnable new] delay:3.5];
+	sleep(1);
+	[queue post:[TestRunnable new]];
+	while(!f1.isDone) {
+		printf("waiting for tasks to complete\n");
 		sleep(1);
 	}
 

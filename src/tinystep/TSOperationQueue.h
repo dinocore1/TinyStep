@@ -40,6 +40,7 @@
 }
 
 -(id<Future>) post:(id<Runnable>) task;
+-(id<Future>) postWithDelay:(id<Runnable>) task delay:(double)secdelay;
 
 -(void) setMaxConcurrent:(int) maxConcurrent;
 

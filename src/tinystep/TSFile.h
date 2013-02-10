@@ -20,6 +20,7 @@
 
 #import <tinystep/TSString.h>
 
+#include <stdio.h>
 
 @interface TSFile : TSObject {
 	TSString* _pathname;
@@ -31,5 +32,19 @@
 -(BOOL) exists;
 -(BOOL) isDirectory;
 -(BOOL) isFile;
+-(TSString*) absolutePath;
+
+@end
+
+@interface TSRandomAccessFile : TSObject {
+	TSFile* _file;
+	FILE* _filehandle;
+}
+
+-(id) initWithFile:(TSFile*) file mode:(const char*)mode;
+
+-(size_t) read:(uint8_t*) buf len:(size_t)len;
+-(size_t) write:(uint8_t*) buf len:(size_t)len;
+-(BOOL) seek:(long int) offset origin:(int) origin;
 
 @end

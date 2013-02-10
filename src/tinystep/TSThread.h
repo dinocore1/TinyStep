@@ -47,6 +47,7 @@ typedef struct autorelease_thread_vars
 }
 
 +(TSThread*) currentThread;
++(void) sleep:(double) seconds;
 
 -(id) initWithTarget:(id)aTarget 
 			selector:(SEL)aSelector

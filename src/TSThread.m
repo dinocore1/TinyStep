@@ -23,6 +23,9 @@
 #import <tinystep/TSAutoreleasePool.h>
 #import <objc/runtime.h>
 
+#import <time.h>
+#import <math.h>
+
 
 static TSThread* mainthread = nil;
 #ifdef THREAD_SUPPORT
@@ -83,6 +86,14 @@ static pthread_key_t thread_object_key;
 	retval = mainthread;
 #endif
 	return retval;
+}
+
++(void) sleep:(double) seconds
+{
+	struct timespec slptm;
+	slptm.tv_sec = floor(seconds);
+	slptm.tv_nsec = (seconds - slptm.tv_sec) * 1000000000.0;
+	nanosleep(&slptm, NULL);
 }
 
 #ifdef THREAD_SUPPORT

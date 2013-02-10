@@ -19,7 +19,7 @@
 
 
 #import <tinystep/TinyStep.h>
-
+#import <tinystep/TSTime.h>
 
 int
 TSQuickSortPartition(id<TSList> list, id<TSComparator> comparator, int left, int right, int pivot)
@@ -71,6 +71,22 @@ TSListShuffle(id<TSList> list)
 	for(i=[list size]; i>1;i--){
 		TSListSwap(list, i-1, rand()%i);
 	}
+}
+
+double
+TSTimeSpecToDouble(timespec ts)
+{
+	double retval = (double)ts.tv_sec + (double)ts.tv_nsec / NSEC_PER_SECOND;
+	return retval;
+}
+
+timespec
+TSDoubleToTimeSpec(double seconds)
+{
+	timespec retval;
+	retval.tv_sec = floor(seconds);
+	retval.tv_nsec = (seconds - (double)retval.tv_sec) * NSEC_PER_SECOND;
+	return retval;
 }
 
 #if defined(BUILD_DEBUG)
